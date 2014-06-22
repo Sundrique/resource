@@ -4,19 +4,27 @@ var config = [
     {
         source: 'source.js',
         reSource: 'reSource.js'
+    },
+    {
+        source: 'source.css',
+        reSource: 'reSource.css'
     }
 ];
 
 function onBeforeLoad(event) {
-    if (event.srcElement.tagName == 'SCRIPT') {
-        for(var i = 0; i < config.length; i++) {
-            var regexp = new RegExp(config[i].source);
-            if (regexp.test(event.url)) {
-                event.preventDefault();
-                var script = document.createElement('script');
-                script.setAttribute('src', config[i].reSource);
-                event.srcElement.parentNode.replaceChild(script, event.srcElement);
-                return;
+    for (var i = 0; i < config.length; i++) {
+        var regexp = new RegExp(config[i].source);
+        if (regexp.test(event.url)) {
+            event.preventDefault();
+            if (event.srcElement.tagName == 'SCRIPT') {
+                var newElement = document.createElement('script');
+                newElement.setAttribute('src', config[i].reSource);
+                event.srcElement.parentNode.replaceChild(newElement, event.srcElement);
+            } else if (event.srcElement.tagName == 'LINK') {
+                var newElement = document.createElement('link');
+                newElement.setAttribute('rel', 'stylesheet');
+                newElement.setAttribute('href', config[i].reSource);
+                event.srcElement.parentNode.replaceChild(newElement, event.srcElement);
             }
         }
     }
