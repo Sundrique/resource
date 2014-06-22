@@ -9,9 +9,9 @@ var config = [
 
 function onBeforeLoad(event) {
     if (event.srcElement.tagName == 'SCRIPT') {
-        console.error(event.url);
         for(var i = 0; i < config.length; i++) {
-            if (event.url == config[i].source) {
+            var regexp = new RegExp(config[i].source);
+            if (regexp.test(event.url)) {
                 event.preventDefault();
                 var script = document.createElement('script');
                 script.setAttribute('src', config[i].reSource);
