@@ -14,6 +14,8 @@
             }
         ];
 
+        var count = 0;
+
         function getReSource(event) {
             var source = event.message;
 
@@ -21,9 +23,14 @@
                 var regexp = new RegExp(config[i].source);
                 if (regexp.test(source)) {
                     event.message = config[i].reSource;
+                    updateCounter();
                     break;
                 }
             }
+        }
+
+        function updateCounter() {
+            safari.extension.toolbarItems[0].badge = ++count;
         }
 
         safari.application.addEventListener("message", getReSource, true);
